@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /*
+      # Factory pattern
+      * 목적
+        - 비슷한 객체를 생성하는 반복 작업 수행
+        - 팩터리 패턴의 사용자가 컴파일 타임에 구체적인 타입(클래스)을 모르고도 객체를 생성할 수 있게 해준다.
+      * 흔히 클래스 내부에서 또는 클래스 스태틱 메서드로 구현
+    */
+
+
+    // # POINT1
+    // parent constructor function
+    function CarMaker() { }
+
+    // parent method
+    CarMaker.prototype.drive = function () {
+      return `Vroom, I have ${this.doors} doors`;
+    }
+
+
+    // static factory method
+    CarMaker.factory = function (type) {
+      var constr = type, newCar;
+
+      // # POINT2
+      // 생성자 존재 하지 않으면 error 발생
+      if (typeof CarMaker[constr] !== "function") {
+        throw {
+          name: "Error",
+          message: `${constr} doesn't exist`
+        };
+      }
+
+      // # POINT3
+      // 생성자의 존재를 확인했으므로 부모를 상속
+      // 상속은 단 한번만 실행하도록 한다.
+      if (typeof CarMaker[constr].prototype.drive !== "function") {
+        CarMaker[constr].prototype = new CarMaker();
+      }
+
+      // # POINT4
+      // 새로운 인스턴스를 생성
+      // CarMaker[constr] => 생성자 함수!, POINT4를 확인하자! 
+      newCar = new CarMaker[constr]();
+
+      // 다른 메서드 호출이 필요하면 여기서 실행한 후, 인스턴스를 반환
+      return newCar;
+    }
+
+
+    // # POINT4
+    // 구체적인 자동차 메이커들을 선언
+    CarMaker.Compact = function () {
+      this.doors = 4;
+    }
+    CarMaker.Convertible = function () {
+      this.doors = 2;
+    }
+    CarMaker.SUV = function () {
+      this.doors = 24;
+    }
+
+
+    var corolla = CarMaker.factory("Compact");
+    var solstaice = CarMaker.factory("Convertible");
+    var cherokee = CarMaker.factory("SUV");
+
+    corolla.drive();
+    solstaice.drive();
+    cherokee.drive();
+
+
+
+    var o = new Object();
+    var n = new Object(1);
+    var s = Object('1');    // # POINT5
+    var b = Object(true);
+
+
+    // # POINT5
+    //  * Obejct는 new를 사용하지 않고 호출 가능
+    //  * 숫자 원시 데이터 타입을 전달하면, 이 생성자는 내부적으로 Number() 생성자로 객체를 만든다.
+    //  * 문자열이나 불린 값 도한 동일하게 적용
+
+    o.constructor === Object; // true;
+    n.constructor === Number; // true;
+    s.constructor === String; // true;
+    b.constructor === Boolean;  // true;
+
+  </script>
+</body>
+
+</html>

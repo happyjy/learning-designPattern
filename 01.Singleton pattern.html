@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Singleton pattern
+
+
+    /*
+    # index
+    * 1. 생성자의 스태틱 프로퍼티에 인스턴스를 저장
+    * 2. 인스턴스를 클로저로 감싼다.
+    * 2.1 프로토타입과 생성자 포인터를 같게 하기 위함.
+    * 2.2 IIFE함수로 생성자, 인스턴스로 바로 설정한다.(2.1의 대안)
+    */
+
+
+
+    console.log("----------------------- 1. 생성자의 스태틱 프로퍼티에 인스턴스를 저장 -------------------------");
+    /*
+      1. 생성자의 스태틱 프로퍼티에 인스턴스를 저장
+
+      * 자바스크립트에서 함수는 객체이므로, 프로퍼티를 가질 수 있다. 
+        * 그래서 Universe.instance와 같은 프로퍼티에 인스턴스를 저장할 수 있다. 
+        * 주석 POINT1 참고
+      * 단점: instance가 공개 됨 => 대안으로 closure 영역에서 설정함으로 비공개로 설정
+    */
+
+    function Universe() {
+      // instance 존재 확인
+      if (typeof Universe.instance === "object") {
+        return Universe.instance;
+      }
+
+      // 정상적으로 진행
+      this.start_time = 0;
+      this.bang = 'Big';
+
+      // 인스턴스를 캐시한다.
+      // ### POINT1
+      Universe.instance = this;
+
+      // 함축적인 반환
+      return this;
+    }
+
+    // 테스트
+    var uni = new Universe();
+    var uni1 = new Universe();
+
+    console.log("uni == uni1: ", uni == uni1); // true
+
+
+    console.log("----------------------- 2. 인스턴스를 클로저로 감싼다. -------------------------");
+    /*
+      2. 인스턴스를 클로저로 감싼다.
+      * 원본 생성자가 최초로 호출되면 일반적인 방식대로 this를 반환
+
+      * POINT2
+        * 재작성된 생성자는 클로저를 통해 비공개 instance 변수에 접근하여 이 인스턴스를 반환 하기만 함
+        * 그래서 두번째 이상 호출 되면 재작성된 생성자가 실행 됨
+      * POINT3
+        * 위 1번 예제에 한정해서 말하면, Universe()의 프로토타입에 무언가를 추가해도 원본 생성자로 생성된 인스턴스와 연결되지 않음
+      * POINT4
+        * 재정의된 생성자, 원본 생성자의 차이   
+    */
+
+    function Universe2() {
+
+      // 캐시된 인스턴스 
+      var instance = this;
+
+      // 정상적으로 진행
+      this.start_time = 0;
+      this.bang = 'Big';
+
+      // ### POINT2 - 생성자를 재작성
+      Universe2 = function Universe2() {
+        return instance;
+      }
+    }
+
+    debugger;
+
+
+    // ### POINT3 - 테스트 
+    Universe2.prototype.nothing = true;
+    var uni = new Universe2();
+    Universe2.prototype.everything = true;
+    var uni2 = new Universe2();
+
+    console.log("### uni.nothing: ", uni.nothing);  // true
+    console.log("### uni2.nothing: ", uni2.nothing);  // true
+    console.log("### uni.everything: ", uni.everything);  // undefined
+    console.log("### uni2.everything: ", uni2.everything);  // undefined <- ### POINT3: singleton pattern을 사용해서 undefined
+
+    // ### POINT2 - 테스트 
+    var uniTest = new Universe2();
+    var uni2Test = new Universe2();
+    console.log(uniTest.constructor.name);
+    console.log(uniTest.constructor === Universe2); // false
+
+    console.log("uni == uni2: ", uniTest == uni2Test);  // true
+
+
+    // ### POINT4 - 테스트
+    console.dir(uni.constructor)
+    console.log(uni.constructor.name);
+    console.log(uni.constructor === Universe2); // false
+
+    //  * uni.constructor가 재정의된 생성자가 아닌 원본 생성자를 가리키고 있기 때문에 결과는 false 이다.
+    //    * 재정의된 생성자: uni.constructor == 클로저에로 반환된 instance 객체(POINT 참고)
+    //    * 원본 생성자: Universe2 생성자 함수
+    //  * ( == 프로토타입과 생성자 포인터가 같지 않다.)
+
+
+
+
+    console.log("----------------------- 2.1 프로토타입과 생성자 포인터를 같게 하기 위함 -------------------------.")
+    /*
+        2.1 프로토타입과 생성자 포인터를 같게 하기 위함.
+        * 2에서 POINT4의 개선 방법
+
+        * POINT7 - new 키워드로 객체 생성시 생성자 함수안에서 호출된 함수와 this의 type
+        * POINT5 - 생성자를 재작성(singleton pattern 적용)
+        * POINT6 - 프로토 타입과 생성자 포인터를 연결
+    */
+
+    /*
+      # TODO 아래 prototype, constructor에 대해서 정리하기 
+        * Constructor
+          - A function that initializes an object
+          - similar to normal java constuctor
+
+        * prototype
+          - Constructor의 property
+          - instance의 property __proto__과 메모리 공유
+          : constructor.prototype === instance.__proto__
+        
+        * instance
+          - Constructor를 new키워드로 호출로 생성한 객체
+
+        * prototype
+          - 생성자 함수만 가지고 있다. 
+          - 생성자 함수로 객체를 생성시 prototype 하위 프로퍼티를 가지고 설정.
+        
+
+        * 
+          Universe2.prototype = uni.__proto__
+
+          uni
+          uni.__proto__
+          uni.__proto__.constructor
+          uni.__proto__.constructor.prototype
+
+          Universe2
+          Universe2.constructor
+          Universe2.prototype
+          Universe2.constructor.prototype
+          Universe2.prototype.constructor
+    */
+
+    function Universe3() {
+      // ### POINT7 - new 키워드로 객체 생성시 생성자 함수안에서 호출된 함수와 this의 type
+      console.log(typeof Universe3);  // function(생성자 함수)
+      console.log(typeof this);       // object( this: 바인딩된 호출된 객체, new 키워드로 호출 되었으면 생성될 객체 )
+
+      // 캐시된 인스턴스 
+      var instance;
+
+      // ### POINT5 - 생성자를 재작성(singleton pattern 적용)
+      Universe3 = function Universe3() {
+        return instance;
+      }
+
+      // ### POINT6 - 프로토 타입과 생성자 포인터를 연결
+      // prototype 프로퍼티를 변경
+      Universe3.prototype = this;
+      // instance
+      instance = new Universe3();
+      // 생성자 포인터를 재정의
+      instance.constructor = Universe3;
+
+      // 정상적으로 진행
+      this.start_time = 0;
+      this.bang = 'Big';
+
+      return instance;
+    }
+
+
+    // 테스트
+    debugger;
+    Universe3.prototype.nothing = true;
+    var uni = new Universe3();
+    Universe3.prototype.everything = true;
+    var uni2 = new Universe3();
+
+    console.log(uni == uni2); //true;
+
+    // 모든 프로토타입 프로퍼티가 언제 선언되었는지와 상관 없이 동작
+    //  * 프로토타입 : uni, uni2
+    //  * 프로토타입 프로퍼티: uni.nothing, uni.everything, uni2.nothing, uni2.everything
+    console.log(uni.nothing && uni.everything && uni2.nothing && uni2.everything);
+
+    // 일반 프로퍼티도 동작
+    console.log(uni.bang); // Big
+    // constructor도 올바르게 가리킨다.
+    console.log(uni.constructor === Universe3); // true;
+
+
+
+    console.log("----------------------- 2.2 IIFE함수로 생성자, 인스턴스로 바로 설정한다.(2.1의 대안 -------------------------)")
+    /*
+      2.2 IIFE함수로 생성자, 인스턴스로 바로 설정한다.(2.1의 대안)
+        * 생성자가 최초로 호출되면, 상성자는 객체를 생성하고 비공개 instance를 가리킨다. 
+        * 두번재 호출 부터는 단순히 비공개 변수를 반환
+    */
+
+    var Universe4;
+    (function () {
+      var instance;
+
+      Universe4 = function () {
+        if (instance) {
+          return instance;
+        }
+
+        instance = this;
+
+        // 일반적으로 진행
+        this.start_time = 0;
+        this.bang = "Big";
+      }
+    })();
+
+    debugger;
+    Universe4.prototype.nothing = true;
+    var uni = new Universe4();
+    Universe4.prototype.everything = true;
+    var uni2 = new Universe4();
+
+    console.log(uni == uni2); //true;
+    console.log(uni.nothing && uni.everything && uni2.nothing && uni2.everything);
+    console.log(uni.bang); // Big
+    console.log(uni.constructor === Universe4); // true;
+  </script>
+</body>
+
+</html>
