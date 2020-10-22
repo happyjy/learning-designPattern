@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /*
+      * AbsctractFactory
+        - Prooducts를 만들 interface 생성
+        - 생성코드: not used in JS
+
+      * ConcreteFactory
+        - 새로운 factory 객체(products를 만들 'manufactures')
+        - 생성코드: EmployeeFactory, VendorFactory 
+    
+      * Products
+        - factory에 의해 생성된 products 인스턴스
+        - 생성코드: Employee, Vendor
+
+      * AbstractProduct
+        - 생성코드: not used in JS
+
+
+    */
+
+
+    function Employee(name) {
+      this.name = name;
+
+      this.say = function () {
+        log.add(`나는 고용인 ${this.name} 이다`);
+      }
+    }
+
+    function EmployeeFactory() {
+      this.create = function (name) {
+        return new Employee(name);
+      }
+    }
+
+    function Vendor(name) {
+      this.name = name;
+
+      this.say = function () {
+        log.add(`나는 판매회사 ${this.name} 이다`);
+      }
+    }
+
+    function VendorFactory() {
+      this.create = function (name) {
+        return new Vendor(name);
+      }
+    }
+
+    var log = (function () {
+      var log = '';
+
+      return {
+        add: function (msg) {
+          log += msg + "\n";
+        },
+        show: function () {
+          console.log(log);
+          log = '';
+        }
+      }
+    })()
+
+    function run() {
+
+      var persons = [];
+      var employeeFactory = new EmployeeFactory();
+      var vendorFactory = new VendorFactory();
+
+      persons.push(employeeFactory.create("고용인1"));
+      persons.push(employeeFactory.create("고용인2"));
+      persons.push(vendorFactory.create("판매회사"));
+      persons.push(vendorFactory.create("판매회사"));
+
+      persons.forEach(v => {
+        v.say();
+      })
+
+      log.show();
+    }
+
+    run();
+  </script>
+</body>
+
+</html>

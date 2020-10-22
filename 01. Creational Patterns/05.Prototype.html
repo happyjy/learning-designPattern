@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script>
+    /*
+
+      * Client
+        - 생성될 객체를 "Clone"하기 위해서 "Prototype"에 요청한다. 
+          : 이말은 즉 Prototype이 객체를 clone 한다.
+
+      * Prototype
+        - 클론할 인터페이스를 생성
+        - CustomerPrototype function
+
+      * Clones
+        - Clone될 객체
+        - Customer
+
+    */
+    /*
+      # Question
+        * [ ] 이걸 어덯게 활용하는 걸가? 
+      # STUDY
+        * function에 this에 선언한 properties들은 
+        new 키워드로 객체를 생성시 생성된 객체의 바로 하위 property에 등록 된다.
+    */
+    function CustomerPrototype(proto) {
+      this.proto = proto;
+
+      this.clone = function () {
+        var customer = new Customer();
+
+        customer.first = proto.first;
+        customer.last = proto.last;
+        customer.status = proto.statust;
+
+        return customer;
+      }
+    }
+
+    function Customer(info = {}) {
+      this.first = info.first;
+      this.last = info.last;
+      this.status = info.status;
+
+      this.say = function () {
+        console.log(`# NAME: ${this.first} ${this.last}, # STATUS: ${this.status}`)
+      }
+    }
+
+    function run() {
+      var proto = new Customer({ first: "n/a", last: "n/a", status: "pending" });
+      var prototype = new CustomerPrototype(proto);
+
+      var customer = prototype.clone();
+      customer.say();
+    }
+
+    run()
+
+  </script>
+</body>
+
+</html>
