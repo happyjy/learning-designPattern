@@ -14,10 +14,10 @@
     : 내블로그, poiema 확인하기 
 
 # 구조 패턴(Structural Patterns)
-[ ][ ][ ] 01.Adapter(적응자)
-[ ][ ][ ] 02.Bridege(가교)
-[ ][ ][ ] 03.Composite(복합체)
-[x][x][ ] 04.Decorator(장식자)
+[ ][구현완료-설명작성필요][ ] 01.Adapter(적응자)
+[ ][구현완료-설명작성필요][ ] 02.Bridege(가교)
+[ ][구현완료-설명작성필요][ ] 03.Composite(복합체)
+[x][구현완료-설명작성필요][ ] 04.Decorator(장식자)
 [x][ ][ ] 05.Facade(퍼사드)
 [ ][ ][ ] 06.Flyweight(플라이급)
 [x][ ][ ] 07.Proxy(프록시)

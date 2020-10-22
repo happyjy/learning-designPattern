@@ -12,6 +12,13 @@
   <script>
 
     /*
+      // POINT1: 계산기 command pattern 에서 현재 값과 연산 기능이 포함된 Command 객체를 stack 자료 형태로 보관
+
+      // POINT1-1: excute하면 수행한 결과값, 수행한 Command 객체를 commands 배열에 stack 자료형태로 보관
+      
+      // POINT2: Command 객체 생성시 두번째 param에 undo function을 넣어준다.
+
+
 
       # [ ] 추가 기능 구현 해보기 
         * 초기화 이전 값
@@ -23,6 +30,7 @@
     function mul(x, y) { return x * y; }
     function div(x, y) { return x / y; }
 
+    // POINT2: Command 객체 생성시 두번째 param에 undo function을 넣어준다.
     var Command = function (execute, undo, value) {
       this.execute = execute;
       this.undo = undo;
@@ -46,30 +54,32 @@
     var Calculator = function () {
       // current: 계산 할 값에 대한 value
       // command: execute시 수행한 연산 stack으로 보관
+      // POINT1
       var current = 0;
-      var command = [];
+      var commands = [];
 
       function action(command) {
-        var name = command.execute(current, command.value);
-        return name.charAt(0).toUpperCase() + name.slice(1);
+        var operationName = command.execute.toString().substr(9, 3);
+        return operationName.charAt(0).toUpperCase() + operationName.slice(1);
       }
 
       // [ ] 여러 객체를 만들지 않을 거라서 prototype에 선언을 하지 않은건가? 
       return {
         execute: function (command) {
+          // POINT1-1: excute하면 수행한 결과값, 수행한 Command 객체를 commands 배열에 stack 자료형태로 보관
           current = command.execute(current, command.value);
           commands.push(command);
-          log.add(action(command) + ": " + command.value);
+          log.add("Execute: " + action(command) + ", value: " + command.value);
         },
 
         undo: function () {
           var command = commands.pop();
-          current = current.undo(current, command.value);
-          log.add("Undo " + action(command) + ": " + command.value);
+          current = command.undo(current, command.value);
+          log.add("Undo: " + action(command) + ", value: " + command.value);
         },
 
         getCurrentValue: function () {
-
+          return current;
         }
       }
     }
@@ -78,10 +88,11 @@
       var log = '';
       return {
         add: function (msg) { log += msg + '\n' },
-        show: function () { console.log(log); log = ''; },
+        show: function () { console.log(log + '\n'); log = ''; },
       }
 
-    })()
+    })();
+
     function run() {
       var calculator = new Calculator();
 
@@ -90,20 +101,23 @@
       calculator.execute(new SubCommand(24));
       calculator.execute(new MulCommand(6));
       calculator.execute(new DivCommand(2));
+      log.show();
 
       //reverse last two commands
       calculator.undo();
-      log.add('\n Value: ' + calculator.getCurrentValue());
+      log.add('Value: ' + calculator.getCurrentValue());
       log.show();
 
-      console.log("---");
+
 
       calculator.undo();
-      log.add('\n Value: ' + calculator.getCurrentValue());
+      log.add('Value: ' + calculator.getCurrentValue());
       log.show();
-
-
     }
+
+
+    run()
+
   </script>
 
 </body>

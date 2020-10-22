@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /*
+        * 두 컴포넌트들을 사용한다
+            - 두 컴포넌트가 각각 자신의 인터페이스를 가지고 있고 서로를 위해서 역할을 한다.
+            - a client, a service
+        * Bridege는 high-level 아키택쳐 패턴이다.
+        * 주된 목표는
+            - 추상적 두개 레벨의 코드를 통해서 더 나은 코드를 만드는 것이다.
+            - loose coupling한 객체를 가능하게 한다.
+        * 때때로 double Adapter 패턴이라고도 한다.
+
+        * 예
+            - Bridget pattern은 어플리케이션(client), db driver(service)으로 구성되어 있다.
+            - 어플리케이션은 잘 선언된 DB API를 선언 되어 있다. (예, ODBC)
+            - 그러나 API는 각 드리이버들의 구현체는 완전히 다른 각각 DB vendor(SQL Servr, MySQL, Oracle, etc)들이라는걸 알수 있다.
+
+        * driver development에서 좋은 패턴이다
+            - 하지만 JavaScript에서 거의 사용하지 않는다.
+
+
+        # Participants
+
+        * Client
+            - 연산을 위해서 Abstraction을 호출한다.
+            - code: run()
+
+        * Abstraction
+            - 첫번째 레벨 Abstraction를 위한 인터페이스를 선언한다.
+            - 구현체를 가리키는 것을 유지 
+            - code: not used in JavaScript
+
+        * RefinedAbstraction
+            - 구현체, Abstraction를 선언된 인터페이스를 확장한 것
+            - code: Gestures, Mouse
+
+        * Implementor
+            - 두번째 레벨 또는 추상 구현체를 선언
+            - code: not used in JavaScript
+        
+        * ConcreteImplementor
+            - 구현해야할 인터페이스를 구현하고, 효과를 선언한다.
+            - code: Screen, Audio
+    */
+
+    /*
+        * 예
+            - Bridge는 input, output device가 독립적으로 수행할 수 있도록한다.
+            - device가 낮은 결합도를 갖도록한다.(낮은 레벨 추상화를 통해서)
+
+        * Javascript는 추상클래스를 지원하지 않는다.
+            - 그래서 "Abstraction", 구현체는 포함하지 않았따. 
+            - 하지만 iterfaces(properties, method)를 일관적으로 구현했다.("Rfinedabstraction", "ConcreteImplementor" function에서)
+            - 아래 예제에서는 "Abstraction" 는 input devices와 구현한 represents Output devices 대표한다.
+
+        * Gesture(finger movements), Mouse는 배우 어려운 input device이다.
+            - 하지만 이것들은 동작한다 
+
+    */
+
+
+    var Gestures = function (output) {
+      this.output = output;
+
+      this.tap = function () { this.output.click(); }
+      this.swipe = function () { this.output.move(); }
+      this.pan = function () { this.output.drag(); }
+      this.pinch = function () { this.output.zoom(); }
+    }
+
+    var Mouse = function (output) {
+      this.output = output;
+
+      this.click = function () { this.output.click(); }
+      this.move = function () { this.output.move(); }
+      this.drag = function () { this.output.drag(); }
+      this.wheel = function () { this.output.zoom(); }
+    }
+
+    var Screen = function () {
+      this.click = function () { log.add("Screen select"); };
+      this.move = function () { log.add("Screen move"); };
+      this.drag = function () { log.add("Screen drag"); };
+      this.zoom = function () { log.add("Screen zoom in"); };
+    }
+
+    var Audio = function () {
+      this.click = function () { log.add("Audio select"); };
+      this.move = function () { log.add("Audio waves"); };
+      this.drag = function () { log.add("Audio screetch"); };
+      this.zoom = function () { log.add("Audio volumn up"); };
+    }
+
+    var log = (function () {
+      var log = '';
+
+      return {
+        add: function (msg) { log += msg + "\n"; },
+        show: function () { console.log(log); log = ""; }
+      }
+    })()
+
+
+    function run() {
+      var screen = new Screen();
+      var audio = new Audio();
+
+      var hand = new Gestures(screen);
+      var mouse = new Mouse(audio);
+      // var hand1 = new Gestures(audio);
+      // var mouse1 = new Mouse(screen);
+
+
+      hand.tap();
+      hand.swipe();
+      hand.pinch();
+
+      mouse.click();
+      mouse.move();
+      mouse.wheel();
+
+      // hand1.tap();
+      // hand1.swipe();
+      // hand1.pinch();
+
+      // mouse1.click();
+      // mouse1.move();
+      // mouse1.wheel();
+      log.show();
+    }
+
+    run();
+
+  </script>
+</body>
+
+</html>
