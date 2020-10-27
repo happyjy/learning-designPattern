@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var log = (function () {
+            var log = '';
+
+            return {
+                add: function (msg) { log += msg + '\n' },
+                show: function () { console.log(log); log = ''; }
+            }
+        })();
+
+        /*
+            * return에 선언된 변수들은 closure
+        */
+        var Employee = function (name, salary, vacation) {
+
+            this.accept = function (visitor) {
+                //this: Employee 객체
+                visitor.visit(this);
+            }
+
+            this.getName = function () {
+                return name;
+            }
+
+            this.getSalary = function () {
+                return salary;
+            }
+
+            this.setSalary = function (sal) {
+                salary = sal;
+            }
+
+            this.getVacation = function () {
+                return vacation;
+            }
+            this.setVacation = function (vac) {
+                vacation = vac;
+            }
+        }
+
+        var ExtraSalary = function () {
+            this.visit = function (emp) {
+                emp.setSalary(emp.getSalary() * 100);
+            }
+        }
+
+        var ExtraVacation = function () {
+            this.visit = function (emp) {
+                emp.setVacation(emp.getVacation() + 2);
+            }
+        }
+
+        function run() {
+            /* 
+                각 Employee에 "ExtraSalary", "ExtraVacation"를 추가해 
+                연봉, 휴가를 늘인다.
+            */
+            var employees = [
+                new Employee("John", 50000, 10),
+                new Employee("Yoon", 55000, 21),
+                new Employee("BONO", 250000, 51),
+            ];
+
+            var visitorSalary = new ExtraSalary();
+            var visitorVacation = new ExtraVacation();
+
+            for (var i = 0, len = employees.length; i < len; i++) {
+                var emp = employees[i];
+
+                emp.accept(visitorSalary);
+                emp.accept(visitorVacation);
+
+                log.add(`${emp.getName()}: $${emp.getSalary()} and ${emp.getVacation()} vacation days`)
+            }
+
+            log.show();
+        }
+
+        run()
+    </script>
+</body>
+
+</html>
