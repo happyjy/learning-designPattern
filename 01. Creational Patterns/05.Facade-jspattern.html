@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 두개 이상의 메서드가 함께 호출되는 경우가 많다면, 이런 메서드 호출들을 하나로 묶어주는 새로운 메서드를 만드는것 
+
+        // 브라우저 이벤트를 처리할 때 사용하는 다음과 같은 메서드
+        /*
+            stopPropagation()
+                : 이벤트가 상위 노드로 전파 되지 않게 중단시킨다.fail
+            preventDefault()
+                : 브라우저의 기본 동작을 막는다(예를들어, 지정된 ㄹ이크로 이동하거나 폼을 전송하지 못하게 한다.)
+
+            두 메서드는 서로 다른 목적을 가지고 있기 때문에 별도로 유지 되어야 하지만 
+            한꺼번에 호출되는 일이 많은 것도 사실디ㅏ. 
+            
+        */
+
+        var myevent = {
+            stop: function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+
+        /*
+            ie에서 이벤트 API의 차이를 처리하는 코드를 추가해보자
+        */
+
+        var myevent = {
+            stop: function (e) {
+                if (typeof e.preventDefault === "function") {
+                    e.preventDefault();
+                }
+
+                if (typeof e.stopPropagation === "function") {
+                    e.stopPropagation();
+                }
+
+                // IE
+                if (typeof e.returnValue === "boolean") {
+                    e.returnValue = false;
+                }
+
+                if (typeof e.cancelBubble === "boolean") {
+                    e.cancelBubble = true;
+                }
+            }
+        }
+
+        /*
+            # 장점
+                * 복잡한 객체의 구현 내용을 교체하는데 시간이 걸리는데
+                * 이와 동시에 이 객체를 사용하는 새로운 코드가 계속해서 작성되고 있을 것이다.
+
+                * 이런경우, 새로운 객체의 API를 생각해보고
+                * 기존 객체 앞에 이 API의 역할을 하는 퍼사드를 생서해 적용해 볼 수 있다.
+                * 이렇게 기존 객체를 완전히 교체하기 전에 최신 코드가 새로운 API를 사용하게 하면 최종 교체시 변경폭을 줄일 수 있다.
+        */
+    </script>
+
+</body>
+
+</html>
