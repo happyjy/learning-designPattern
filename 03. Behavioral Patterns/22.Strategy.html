@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        /*
+            Shipping 생성자 객체 company 프로퍼티에 
+            순차적으로 UPS, USPS, Fedex 생성자 객체를 할당해 
+        */
+
+        var Shipping = function () {
+            this.company = ""; //UPS, USPS, Fedex 생성자 객체가 차례로 할당
+        }
+
+        Shipping.prototype = {
+            setStrategy: function (company) {
+                this.company = company;
+            },
+            calculate: function (package) {
+                return this.company.calculate(package);
+            }
+        }
+
+        var UPS = function () {
+            this.calculate = function (package) {
+                // calculations...
+                return "$45.95";
+            }
+        }
+
+        var USPS = function () {
+            this.calculate = function (package) {
+                // calculations...
+                return "$39.40";
+            }
+        }
+
+        var Fedex = function () {
+            this.calculate = function (package) {
+                // calculations...
+                return "$43.20";
+            }
+        }
+
+        var log = (function () {
+            var log = '';
+
+            return {
+                add: function (msg) { log += msg + '\n' },
+                show: function () { console.log(log); log = ''; }
+            }
+        })()
+
+        function run() {
+            var package = { from: "76712", to: "10012", weight: "1kg" };
+
+            // the 3 strategies
+
+            var ups = new UPS();
+            var usps = new USPS();
+            var fedex = new Fedex();
+
+            var shipping = new Shipping();
+
+            shipping.setStrategy(ups);
+            log.add("UPS Strategy: " + shipping.calculate(package));
+            shipping.setStrategy(usps);
+            log.add("USPS Strategy: " + shipping.calculate(package));
+            shipping.setStrategy(fedex);
+            log.add("FEDEX Strategy: " + shipping.calculate(package));
+
+            log.show();
+        }
+
+        run()
+
+    </script>
+</body>
+
+</html>
