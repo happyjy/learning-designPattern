@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            datastore.process를 상속받은 객체가 "connect, select, disconnect" 이 세개 function을 정의 하지 않으면 error가 난다.
+        */
+        var datastore = {
+            // 상속 대상(프로토타입에 할당)
+            process: function () {
+                try {
+                    this.connect();
+                    this.select();
+                    this.disconnect();
+                } catch (error) {
+                    console.log(error)
+                }
+                return this;
+            }
+        }
+
+        function inherit(proto) {
+            var F = function () { };
+            F.prototype = proto;
+            return new F();
+        }
+
+        var log = (function () {
+            var log = '';
+
+            return {
+                add: function (msg) { log += msg + '\n' },
+                show: function () { console.log(log); log = ''; }
+            }
+        })();
+
+        function run() {
+            var mySql = inherit(datastore);
+
+            // implement template steps
+            mySql.connect = function () {
+                log.add("MySQL: connect step");
+            }
+            mySql.select = function () {
+                log.add("MySQL: select step");
+            }
+            mySql.deforeDisconnect = function () {
+                log.add("MySQL: deforeDisconnect step");
+            }
+            // mySql.disconnect = function () {
+            //     log.add("MySQL: disconnect step");
+            // }
+
+            mySql.process();
+            log.show();
+        }
+
+        run();
+
+    </script>
+</body>
+
+</html>
