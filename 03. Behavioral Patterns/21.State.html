@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        /*
+            run()
+                ㄴ TrafficLight.start()
+                    ㄴ Red.go()
+                        ㄴ TrafficLight.change()
+                            ㄴ Green.go()
+                                ㄴ TrafficLight.change()
+                                    ㄴ Yellow.go()
+                                        .
+                                        .
+                                        . 반복
+        */
+
+
+        /*
+            # this: TrafficLisght 생성자 함수
+            # currentState는 "Yellow", "Green" 생성자 함수 객체로 변경된다.
+            # count, currentState 변수는 외부에 노출 되지 않도록 "clousre 영역에"
+        */
+        var TrafficLight = function () {
+            var count = 0;
+            var currentState = new Red(this);
+
+            this.change = function (state) {
+                // limits numbe of changes
+                if (count++ >= 10) return;
+                currentState = state;
+                currentState.go();
+            }
+
+            this.start = function () {
+                currentState.go();
+            }
+        }
+
+        // TrafficLight으로 객체 생성시 prototype chain으로 아래 prototype에 설정된 change, start는 실행 되지 않는다.
+        // # count.currentState에 접근 할 수 없다.
+        TrafficLight.prototype = {
+            change: function (state) {
+                // limits numbe of changes
+                if (count++ >= 10) return;
+                currentState = state;
+                currentState.go();
+            },
+
+            start: function () {
+                currentState.go();
+            },
+
+            test: function () {
+                console.log(" test ")
+            }
+
+
+        }
+
+        /*
+            # light: TrafficLight 생성자 함수 객체
+        */
+        var Red = function (light) {
+            this.light = light;
+
+            this.go = function () {
+                log.add("# RED ---> for 1 minute");
+                light.change(new Green(light));
+            }
+
+        }
+
+        var Green = function (light) {
+            this.light = light;
+
+            this.go = function () {
+                log.add("## Green ---> for 10 seconds");
+                light.change(new Yellow(light));
+            }
+        }
+
+        var Yellow = function (light) {
+            this.light = light;
+
+            this.go = function () {
+                log.add("### Yellow ---> for 1minutes");
+                light.change(new Red(light));
+            }
+        }
+
+        var log = (function () {
+            var log = '';
+
+            return {
+                add: function (msg) { log += msg + '\n' },
+                show: function () { console.log(log); log = ''; }
+            }
+        })();
+
+        function run() {
+            var light = new TrafficLight();
+            light.start()
+
+            log.show()
+        }
+
+        run()
+    </script>
+</body>
+
+</html>
