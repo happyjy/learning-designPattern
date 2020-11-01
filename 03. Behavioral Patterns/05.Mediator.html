@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    var log = (function () {
+      var log = '';
+
+      return {
+        add: function (msg) {
+          log += msg + "\n";
+        },
+        show: function () {
+          console.log(log);
+          log = '';
+        }
+      }
+    })();
+
+    var Participant = function (name) {
+      this.name = name;
+      this.chatroom = null;
+    }
+
+    Participant.prototype = {
+      send: function (message, to) {
+        this.chatroom.send(message, this, to);
+      },
+      receive: function (message, from) {
+        log.add(`${from.name} to ${this.name} : ${message}`);
+      }
+    }
+
+    var Chatroom = function () {
+      var participants = {};
+      return {
+        /*
+          register에 의해서 모든 participant들은 chatroom 객체를 상속 받는다. 
+
+          parameter(participant): Participant 생성자 함수의 instance
+        */
+        register: function (participant) {
+          participants[participant.name] = participant;
+          participant.chatroom = this;
+        },
+
+        send: function (message, from, to) {
+          if (to) {                       // single mesagge
+            to.receive(message, from);
+          } else {                        // broadcast message
+            for (key in participants) {
+              if (participants[key] !== from) {
+                participants[key].receive(message, from);
+              }
+            }
+          }
+        }
+      };
+    };
+
+    function run() {
+      var jyoon = new Participant("JYOON");
+      var boa = new Participant("BOA");
+      var yoonho = new Participant("YOONHO");
+      var iu = new Participant("IU");
+
+      var chatroom = new Chatroom();
+      chatroom.register(jyoon);
+      chatroom.register(boa);
+      chatroom.register(yoonho);
+      chatroom.register(iu);
+
+      jyoon.send("All you need is love. chrismas is comming!!!");
+      jyoon.send("I love you boa");
+      boa.send("Hey, no need to broadcast", jyoon);
+      yoonho.send("Ha, I heard that !!! I love boa too !!!");
+      iu.send("yoonho, what do you think? ", yoonho);
+
+      log.show();
+    }
+
+    run()
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var log = (function () {
+      var log = '';
+
+      return {
+        add: function (msg) {
+          return log += msg + '\n';
+        },
+        show: function () {
+          console.log(log);
+          log = '';
+        }
+      }
+    })();
+
+
+    var Request = function (amount) {
+      this.amount = amount;
+      log.add(`### Requested: $${amount} \n`);
+    }
+
+    Request.prototype = {
+      get: function (bill) {
+        var count = Math.floor(this.amount / bill);
+        this.amount -= count * bill;
+        log.add(`### Dispense ${count} $${bill} bills`);
+
+        /*  
+          ### POINT
+            this: get을 호출한 req 객체
+        */
+        return this;
+      }
+    }
+
+    function run() {
+      var req = new Request(777);
+
+      req.get(100).get(50).get(10).get(5).get(1);
+
+      log.show();
+    }
+
+    run()
+
+  </script>
+</body>
+
+</html>

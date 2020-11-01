@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var log = (function () {
+      var log = '';
+
+      return {
+        add: function (msg) {
+          log += msg + "\n";
+        },
+        show: function () {
+          console.log(log);
+          log = '';
+        }
+      }
+    })();
+
+
+    /* 
+      # POINT1
+        * Observer 생성자 함수에서 fire할 때 대상 this.handler
+        * this.handler 설정은 subscribe, unsubscribe에서 해주고 있다.
+
+      # POINT2
+        * 호출 될 함수의 scope 설정
+    */
+
+    // Observer 생성자 함수
+    function Click() {
+      this.handlers = [];   //observers
+    }
+
+    Click.prototype = {
+      subscribe: function (fn) {
+        this.handlers.push(fn);
+      },
+
+      unsubscribe: function (fn) {
+        this.handlers = this.handlers.filter(item => {
+          return item !== fn
+        });
+      },
+
+      fire: function (o, thisObj) {
+        // POINT2: 호출 될 함수의 scope 설정
+        var scope = thisObj || window;
+        this.handlers.forEach(item => {
+          item.call(scope, o);
+        });
+      }
+    };
+
+    function run() {
+      var clickHandler = function (item) {
+        log.add(`fired: ${item}`);
+      }
+
+      var click = new Click();
+
+      click.subscribe(clickHandler);
+      click.fire("event #1");
+      click.unsubscribe(clickHandler);
+      click.fire("event #2");
+      click.subscribe(clickHandler);
+      click.fire("event #3");
+
+      log.show();
+    }
+
+    run();
+  </script>
+</body>
+
+</html>

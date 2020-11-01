@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=Facade, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Mortgage: (담보) 대출(금), 융자(금)/ 저당 잡히다
+    var Mortgage = function (name) {
+      this.name = name;
+    }
+
+    Mortgage.prototype = {
+      // access multiple subsystems...
+      applyFor: function (amount) {
+        var result = "approved";
+
+        if (!new Bank().verify(this.namej, amount)) {
+          result = "denied";
+        } else if (!new Credit().get(this.name)) {
+          result = "denied";
+        } else if (!new Background().check(this.name)) {
+          result = "denied";
+        }
+
+        return `${this.name} has been ${result} for a ${amount} mortage`;
+      }
+    }
+
+    var Bank = function () {
+      this.verify = function (name, amount) {
+        // complex logic ...
+        return true;
+      }
+    }
+    var Credit = function () {
+      this.get = function (name) {
+        // complex logic ... 
+        return true;
+      }
+    }
+
+    var Background = function () {
+      this.check = function (name) {
+        // complex logic ... 
+        return true;
+      }
+    }
+
+    function run() {
+      var mortage = new Mortgage("Jyoon");
+      var result = mortage.applyFor("$100,000");
+
+      console.log(result);
+    }
+
+    run();
+
+    /*
+      생성자 함수에 this.xxx function을 선언하는 거소가
+      생성자 함수 prototype 프로퍼티에 function을 선언하는 것의 차이
+
+      (#POINT2)
+      생성자 함수 prototype 프로퍼티에 function을 선언하면
+      new 키워드로 객체를 생성하고 prototype에 선언한 function을 수정하면(생성된객체.__proto__.function)
+      생성자 함수의 prototype function이 수정된다. (메모리 공유)
+
+      (#POINT3)
+      하지만 생성된객체[function 명] = function(){} 이렇게 선언된 함수는 메모리 공유를 하지 않는다. (원래 생성자 함수와 메모리 공유를 하지 않는다.)
+
+      (#POINT1)
+      하지만
+      생성자 함수에 function을 추가 하게 되면 new 키워드로 생성자 함수로 생성한 객체를 변경후
+      new 키워드로 다른 객체를 생성해도 변경한 함수는 변경되지 않는다.
+    */
+
+    // 생성자 함수
+    var func1 = function () {
+      this.name = 'func1';
+      this.testFunc = function () {
+        return 'func1.testFunc';
+      }
+    }
+
+    // 생성자 함수
+    var func2 = function () {
+      this.name = 'func2';
+    }
+
+    func2.prototype = {
+      testFunc: function () {
+        return 'func2.prototype.testfunc'
+      }
+    }
+
+    // f1, f2: 생성된 객체
+    var f1 = new func1();
+    var f2 = new func2();
+    console.log(f1.testFunc()); //func1.testFunc
+    console.log(f2.testFunc()); //func2.prototype.testfunc
+
+
+    f1.testFunc = () => 'func1.textFunc 변경';
+    f2.__proto__.testFunc = () => 'func1.textFunc 변경';
+    f2.testFunc1 = () => 'func1.testFunc1 추가';
+
+    var newF1 = new func1();
+    var newF2 = new func2();
+    // #POINT1
+    console.log(newF1.testFunc());  //func1.testFunc
+    // #POINT2
+    console.log(newF2.testFunc());  //func1.textFunc 변경
+    // #POINT3
+    console.log(newF2.testFunc1()); //Uncaught TypeError: newF2.testFunc1 is not a function
+  </script>
+</body>
+
+</html>
