@@ -14,13 +14,13 @@
     : 내블로그, poiema 확인하기 
 
 # 구조 패턴(Structural Patterns)
-* [ ][구현완료-설명작성필요][ ] 01.Adapter(적응자)
-* [ ][구현완료-설명작성필요][ ] 02.Bridege(가교)
-* [ ][구현완료-설명작성필요][ ] 03.Composite(복합체)
-* [x-code없음][구현완료-설명작성필요][ ] 04.Decorator(장식자)
-* [x-code없음][구현완료-설명작성필요][ ] 05.Facade(퍼사드)
-* [ ][구현완료-설명작성필요][ ] 06.Flyweight(플라이급)
-* [x-code없음][구현완료-설명작성필요][ ] 07.Proxy(프록시)
+* [ ][구현완료-설명작성-UML필요][ ] 01.Adapter(적응자)
+* [ ][구현완료-설명작성-UML필요][ ] 02.Bridege(가교)
+* [ ][구현완료-설명작성][ ] 03.Composite(복합체)
+* [x-code없음][구현완료-설명작성][ ] 04.Decorator(장식자)
+* [x-code없음][구현완료-설명작성][ ] 05.Facade(퍼사드)
+* [ ][구현완료-설명작성][ ] 06.Flyweight(플라이급)
+* [x-code없음][구현완료-설명작성][ ] 07.Proxy(프록시)
 
 # 행동 패턴(Behavioral Patterns)
 * [ ][구현완료-설명작성필요][ ] 01.Chain of Responsibility(책임 연쇄)
