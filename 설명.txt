@@ -1,4 +1,12 @@
-### Chain of Responsiblity 
+
+### 행동 패턴(Behavioral Patterns)
+01.ChainOfResp.
+02.Command.
+03.Interpreter.
+04.Iterator.
+05.Mediator.
+
+### ChainOfResp(Chain of Responsiblity )
 # def
 Chain of Responsiblity 패턴은 느슨하게 결합 된 개체의 사슬을 제공하며 
 그 중 하나가 요청을 충족 할 수 있다.
@@ -144,11 +152,7 @@ Mediator의 또 다른 예는 비행기의 도착과 출발을 조정하는 공�
 이 예는 간단하지만 참가자가 정크 메시지를받지 못하도록 보호하는 '정크 필터'와 같은 다른 복잡한 규칙을 추가 할 수 있습니다.
 
 
-01.ChainOfResp.
-02.Command.
-03.Interpreter.
-04.Iterator.
-05.Mediator.
+
 
 06.Memento.
 07.Observer. 

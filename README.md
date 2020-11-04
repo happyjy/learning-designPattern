@@ -1,6 +1,6 @@
 > learning-designPattern
 
-# 생성 패턴(Creatinal Patterns)
+# 생성 패턴(Creational Patterns)
 * [js pattern][dofactory][js design pattern]
 * [ ][x][ ] 01.Abstract Factory(추상 팩토리)
   - EmployeeFactory, VendorFactory가 왜 있어야 하는지 확인해보자!
