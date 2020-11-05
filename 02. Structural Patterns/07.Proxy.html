@@ -49,16 +49,17 @@
 
         * 여러 도시 위치가 조회되고 이들 중 다수는 동일한 도시에 대한 것이다.
         * GeoProxy는 이러한 호출을 지원하면서 캐시를 구축합니다. 
-          - 결국 GeoProxy는 11개의 요청을 처리했지만 GeoCoder로 3번만 요청된다. 
+          - 결국 GeoProxy는 geocoder.getLatLng으로 11개의 요청을 처리했지만 GeoCoder객체로 3번만 요청된다. 
           - 클라이언트 프로그램은 프록시 객체에 대해 모른다.(표준 getLatLng 메소드로 동일한 인터페이스를 호출)
 
       # 나의 해석
         * 코드에서 POINT 주석으로 되어 있는 부분
-        * getLatLng으로 요청 될때 geocache객체가 캐싱객체로 사용된다.
+          - getLatLng으로 요청 될때 geocache객체가 캐싱객체로 사용된다.
           - 그래서 캐싱 객체에 객체가 없을 때만 생성된 GeoCoder인스턴스(geocoder)의 getLatLng이 호출된다.
-        * 얘를 들어 GeoCoder가 DB 로직이고 
-          GeoProxy가 서버 코드라고 한다면
-          GeoProxy에 요청이 왔을때 geocache에 있는 값이면 db요청을 하지 않아도 되기 때문에 비용을 줄일 수 있겠구나.
+          
+          - 예로 GeoCoder가 DB 로직이고 
+            GeoProxy가 서버 코드라고 한다면
+            GeoProxy에 요청이 왔을때 geocache에 있는 값이면 db요청을 하지 않아도 되기 때문에 비용을 줄일 수 있겠구나.
     */
 
     function GeoCoder() {

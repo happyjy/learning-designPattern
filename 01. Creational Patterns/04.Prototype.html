@@ -8,49 +8,40 @@
 </head>
 
 <body>
-
   <script>
     /*
-
       # def
-        * 프록시 패턴은 다른 개체에 대신할 개체를 제공하고 이 다른 개체에 대한 액세스를 제어합니다.
-        
-        * 객체 지향 프로그래밍에서 객체는 인터페이스(속성 및 메서드)를 통해 알리는 작업을 수행한다.
-        * 이러한 개체의 클라이언트는 이 작업이 빠르고 효율적으로 수행되기를 원한다.
-        * 그러나 객체가 심각하게 제한되어 책임을 다할 수 없는 상황이 있다.
-        * 일반적으로 원격 리소스에 대한 종속성이 있거나 (네트워크 대기 시간이 발생 함) 개체를 로드하는 데 오랜 시간이 걸리는 경우에 발생한다.
+        * Prototype Pattern은 새로운 객체를 만든다. 
+          객체를 초기화 하지 않은 상태에서 객체를 반환한다. 
+          이것은 초기화되지 않은 객체이며 된다
+        * Prototype pattern은 또한 Property를 패턴을 참조한다.
 
-        * 이와 같은 상황에서는 프록시 패턴을 적용하고 원본 객체를 '대기'하는 프록시 객체를 만든다.
-        * 프록시는 요청을 대상 개체로 전달한다.
-        * Proxy 개체의 인터페이스는 원래 개체와 동일하며 클라이언트는 실제 개체가 아닌 프록시를 처리하고 있다는 사실조차 인식하지 못할 수 있다.
+        * Prorotype 패턴이 유용하게 사용되는 객체는 데이터베이스 에 기본 값을 매핑 할때이다. 
+        * 프로토타입 객체는 기본 값을 가지고 있으며 복사해서 새로운 객체를 만든다.
+        
+        * 클래식한 언어에서는 프로토타입 패턴이 거의 사용되지 않으나 
+          프로토타입 언어인 자바스크립트는 객체의 상성자로서, Prorotype들로 생성하는데 사용된다.
+        
 
       # Participants
         * Client
-          - 생성될 객체를 "Clone"하기 위해서 "Prototype"에 요청한다. 
-            : 이말은 즉 Prototype이 객체를 clone 한다.
+          - 원하는 prototype을 복사하기 위해서 새로운 객체를 만든다.
+          - code: run()
         * Prototype
           - 클론할 인터페이스를 생성
-          - CustomerPrototype function
-
+          - code: CustomerPrototype function
         * Clones
           - Clone될 객체
-          - Customer
+          - code: Customer
 
-      # 샘플 코드 설명
-        * GeoCoder 객체는 Google Maps Geocoding 서비스를 시뮬레이션한다.
-        * 지오 코딩에서 위치 (지구상의 한 장소)를 제공하면 위도/경도 (latlng)가 반환된다.
-        * GeoCoder는 4개의 위치만 확인할 수 있지만 실제로는 국가, 도시 및 거리가 포함되어 있기 때문에 수백만 개가 있다.
+      # 예제 코드 설명
+        * CustomerPrototype 객체
+          - 이 생성자 함수는 clone변수에 Customer type의 prototype의 객체를 생성/ 반환한다.
+          - clone함수를 호출시 Customer 객체를 반환한다. 
+            생성자함수의 proto 변수에 초기화된 객체로 초기화 된 Customer 객체
 
-        * 프로그래머는 GeoCoder가 상대적으로 느리기 때문에 Proxy객체를 구현하기로 결정했다
-        * 프록시 개체를 GeoProxy라고 한다.
-        * 동일한 위치에 대해 반복되는 요청이 많이 들어오는 것으로 알려져 있다.
-        * [POINT] GeoProxy는 속도를 높이기 위해 자주 요청되는 위치를 캐시합니다. GeoProxy의 geocahe 객체!
-        * 위치가 아직 캐시되지 않은 경우 실제 GeoCoder 서비스로 이동하여 결과를 캐시에 저장합니다.
-
-        * 여러 도시 위치가 조회되고 이들 중 다수는 동일한 도시에 대한 것이다.
-        * GeoProxy는 이러한 호출을 지원하면서 캐시를 구축한다.
-        * 결국 GeoProxy는 getLatLng으로 11개의 요청을 처리했지만 GeoCoder로 3번만 요청 했다. 
-        * 클라이언트 프로그램에는 프록시 개체에 대한 정보가 없다.(표준 getLatLng 메서드를 사용하여 동일한 인터페이스를 호출 한다.
+        * 이것을 프로토타입의 고전적인 구현 방법이며 
+            자바스크립트에서 더 효과적인것은 내장되어 있는 prototype 기능을 사용하는 것이다. 
         
       # Question
         * [ ] 이걸 어덯게 활용하는 걸가? 
@@ -69,7 +60,7 @@
 
         customer.first = proto.first;
         customer.last = proto.last;
-        customer.status = proto.statust;
+        customer.status = proto.status;
 
         return customer;
       }
@@ -81,7 +72,7 @@
       this.status = info.status;
 
       this.say = function () {
-        console.log(`# NAME: ${this.first} ${this.last}, # STATUS: ${this.status}`)
+        console.log(`# NAME: ${this.first}, # LAST: ${this.last}, # STATUS: ${this.status}`)
       }
     }
 

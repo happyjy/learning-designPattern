@@ -40,7 +40,7 @@
           - code: DecoratedUser
 
       # code 설명
-        * User 객체는 DecorateddUser객체에의해서 확장된다.
+        * User 객체는 DecorateddUser객체에 의해서 확장된다.
         * 이 확장은 User에 주소 관련 정보를 확장한다.
         * [POINT]원래 인터페이스는 그대로 있어야 하고 user.name이 this.name으로 할당 되어야한다.
         * 또한 같은 Decorateduser의 say 함수는 User의 say method를 감춘다.
@@ -50,6 +50,15 @@
         * Javascript는 runtime에도 객체에 함수를 추가 할 수 있기 때문에 java와같은 statically한 언어에서 유용한 구조 패턴이다.
         * Decorator 패턴은 기존 객체에 기능(책임)을 추가할 수 있는 패턴으로 기능이 확장이 필요할때 서브 클래싱 대힌에 유연한 대안이 될 수 있다.
     */
+    var log = (function () {
+      var log = "";
+
+      return {
+        add: function (msg) { log += msg + "\n"; },
+        show: function () { console.log(log); log = ""; }
+      }
+    })();
+
     var User = function (name) {
       this.name = name;
 
@@ -60,7 +69,7 @@
 
     var DecoratedUser = function (user, street, city) {
       this.user = user;
-      this.name = user.name;  // [POINT]ensures interface stays the same
+      this.name = user.name;  // [POINT] ensures interface stays the same
       this.street = street;
       this.city = city;
 
@@ -68,15 +77,6 @@
         log.add("Decorated User: " + this.name + ", " + this.street + ", " + this.city);
       };
     }
-
-    var log = (function () {
-      var log = "";
-
-      return {
-        add: function (msg) { log += msg + "\n"; },
-        show: function () { alert(log); log = ""; }
-      }
-    })();
 
     function run() {
       var user = new User("Kelly");

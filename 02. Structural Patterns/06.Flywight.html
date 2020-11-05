@@ -61,6 +61,16 @@
         * 크기가 작은 객체가 여러 개 있을 때, 공유를 통해서 이들을 효율적으로 지원하는 패턴
     */
 
+
+    var log = (function () {
+      var log = '';
+
+      return {
+        add: function (msg) { log += msg + '\n' },
+        show: function () { console.log(log); log = ''; }
+      }
+    })();
+
     function Flyweight(make, model, processor) {
       this.make = make;
       this.model = model;
@@ -107,7 +117,6 @@
       }
     }
 
-
     var Computer = function (make, model, processor, memory, tag) {
       this.flywight = FlyWeightFactory.get(make, model, processor, memory, tag)
       this.memory = memory;
@@ -117,18 +126,10 @@
       }
     }
 
-    var log = (function () {
-      var log = '';
-
-      return {
-        add: function (msg) { log += msg + '\n' },
-        show: function () { console.log(log); log = ''; }
-      }
-    })();
-
     function run() {
       /*
-          # ComputerCollection.add(make, model, processor, memory, tag)
+          # 코드 흐름
+            * new ComputerCollection.add(make, model, processor, memory, tag)
               -> new Computer(make, model, processor, memory, tag)
               -> FlyWeightFactory.get(make, model, processor)
               -> new Flywight(make, model, processor)

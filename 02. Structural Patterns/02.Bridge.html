@@ -10,25 +10,21 @@
 <body>
   <script>
     /*
-
       # def
         * 두 컴포넌트들을 사용한다
           - 두 컴포넌트가 각각 자신의 인터페이스를 가지고 있고 서로를 위해서 역할을 한다.
           - a client, a service
         * Bridege는 high-level 아키택쳐 패턴이다.
-        * 주된 목표
+        * [POINT] 주된 목표
           - 추상적 두개 레벨의 코드를 통해서 더 나은 코드를 만드는 것이다.
           - loose coupling한 객체를 가능하게 한다.
         * 때때로 double Adapter 패턴이라고도 한다.
-
         * 자주사용되는 예: DB API
             - Bridget pattern은 어플리케이션(client), db driver(service)으로 구성되어 있다.
             - 어플리케이션은 잘 선언된 DB API를 선언 되어 있다. (예, ODBC)
             - 그러나 API는 각 드리이버들의 구현체는 완전히 다른 각각 DB vendor(SQL Servr, MySQL, Oracle, etc)들이라는걸 알수 있다.
-
         * driver development에서 좋은 패턴이다
             - 하지만 JavaScript에서 거의 사용하지 않는다.
-
 
       # Participants
         * Client
@@ -59,13 +55,12 @@
             - 하지만 iterfaces(properties, method)를 일관적으로 구현했다.("RefinedAbstraction", "ConcreteImplementor" function에서)
             - 아래 예제에서는 "Abstraction" 는 input devices와 구현한 represents Output devices 대표한다.
 
-        
-        * [POINT] Gesture(finger movements), Mouse는 매우 다른 input device이다. 
+        * Gesture(finger movements), Mouse는 매우 다른 input device이다. 
         * 그러나 그것의 동작은 공통으로 정한 동작
           (click, move, drag, zoom 등등-Screen, Audio객체에 선언)과 매핑 되어 있다. 
         * 그러나 그것들은 같은 명령에 같은 응답을 한다.
-        * 물론 video, sound effects들의 효과는 다르다
-          - 효과는 ConcreteImplementor 클래스(Screen, Audio)에 선언
+        * 물론 video, sound의 동작은 다르다
+        * 효과는 ConcreteImplementor 클래스(Screen, Audio)에 선언
         * Bridge pattern은 어떤 input device와 어떤 output device와 동작 할 수 있도록 도와준다.
 
       # 나의 분석
@@ -79,7 +74,7 @@
             트랙패드(Gesture)의 swipe === 마우스의 move
             트랙패드(Gesture)의 pan   === 마우스의 drag
             트랙패드(Gesture)의 pinch === 마우스의 zoom
-        * 즉,
+        * [POINT] 즉,
           input 디바이스마다 반복적으로 보여줄 동작을 구현하는 것이 아니라 
           ConcreteImplementor(Screen, audio) 클래스를생성해 
           Bridge 패턴 구조를 만들어 효율적으로 관리하는 패턴으로 해석할 수 있겠다.
@@ -87,14 +82,16 @@
 
 
     /* 
-      * 역할: RefinedAbstraction
-      * parameter
-        - output: ConcreateImplementor(Screen, Audio)
-      * 설명 
-        - output으로 받은 ConcreateImplementor객체를 수행한다.
-        - Bridge 역할을 한다.
+      #  Gestures, Mouse 함수 설명
+        * 역할: RefinedAbstraction
+        * parameter
+          - output: ConcreateImplementor(Screen, Audio)
+        * 설명 
+          - output으로 받은 ConcreateImplementor객체를 수행한다.
+          - Bridge 역할을 한다.
     */
     // 트랙패드라고 생각하자
+    // RefinedAbstraction
     var Gestures = function (output) {
       this.output = output;
 
@@ -103,15 +100,7 @@
       this.pan = function () { this.output.drag(); }
       this.pinch = function () { this.output.zoom(); }
     }
-
-    /* 
-      * 역할: RefinedAbstraction
-      * parameter
-        - output: ConcreateImplementor(Screen, Audio)
-      * 설명 
-        - output으로 받은 ConcreateImplementor객체를 수행한다.
-        - Bridge 역할을 한다.
-    */
+    // RefinedAbstraction
     var Mouse = function (output) {
       this.output = output;
 
@@ -144,7 +133,7 @@
         add: function (msg) { log += msg + "\n"; },
         show: function () { console.log(log); log = ""; }
       }
-    })()
+    })();
 
     function run() {
       var screen = new Screen();
