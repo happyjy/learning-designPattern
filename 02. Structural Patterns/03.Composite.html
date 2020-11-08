@@ -14,11 +14,11 @@
       # def
         * collection의 각 item들은 다른 collection을 nested 구조로 가질 수 있다. 
         
-        * 트리 구조 는 Composite pattern의 완벽한 예입니다. 
-        * 트리의 각 노드는 leaf node subtree of node를 포함힙니다.
+        * 트리 구조 는 Composite pattern의 완벽한 예다. 
+        * 트리의 각 노드는 leaf node subtree of node를 포함한다.
         
-        * Composite 패턴의 모든 노드는 개별 개체와 객체 collection 지원하는 공통 속성 및 메서드 집합을 공유합니다. 
-        * 이 공통 인터페이스는 Composite 컬렉션의 각 객체를 반복하는 재귀 알고리즘의 설계, 구성을 용이하게 합니다.
+        * Composite 패턴의 모든 노드는 개별 객체와 객체 collection 지원하는 공통 속성 및 메서드 집합을 공유한다. 
+        * 이 공통 인터페이스는 Composite 컬렉션의 각 객체를 반복하는 재귀 알고리즘의 설계, 구성을 용이한다.
 
       # Participants
         * Components
@@ -56,7 +56,17 @@
 
     */
 
+    var log = (function () {
+      var log = '';
+
+      return {
+        add: function (msg) { log += msg + '\n' },
+        show: function () { console.log(log); log = ''; }
+      }
+    })();
+
     // POINT1: Node에는 Node의 이름, 자식으로 가질 배열 변수를 갖음
+    // Component, Leaf, Composite 역할
     var Node = function (name) {
       this.children = [];
       this.name = name;
@@ -105,15 +115,6 @@
         traverse(indent, node.getChild(i));
       }
     }
-
-    var log = (function () {
-      var log = '';
-
-      return {
-        add: function (msg) { log += msg + '\n' },
-        show: function () { console.log(log); log = ''; }
-      }
-    })()
 
     function run() {
       var tree = new Node("root");

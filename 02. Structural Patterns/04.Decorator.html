@@ -8,16 +8,15 @@
 </head>
 
 <body>
-
   <script>
     /*
       # def
         * Decorator pattern은 객체의 행동을 드라마틱하게 확장시키는 것이다. 
-        * runtime에 새로운 행동을 추가하는 능력은 Decorator객체가 기존 객체를 감싸면서 해낼 수 있습니다.
-        * 여러개의 decorator들은 오버라이드 또는 기능을 더 할 수 있습니다.
+        * runtime에 새로운 행동을 추가하는 능력은 Decorator객체가 기존 객체를 감싸면서 해낼 수 있다.
+        * 여러개의 decorator들은 오버라이드 또는 기능을 더 할 수 있다.
         
         * decorator은 보안 관리이다.(비즈니스 객체는 인증 된 사용자의 권한에 따라 추가적으로 정보에 접근할 수 있는 특권이 부여된다.)
-          - 예를 들어 HR 관리자는 급여 정보를 볼 수 있도록 직원의 급여 기록이 추가 된 (즉, 장식 된) 직원 개체로 작업하게됩니다.
+          - 예를 들어 HR 관리자는 급여 정보를 볼 수 있도록 직원의 급여 기록이 추가 된 (즉, 장식 된) 직원 객체로 작업하게된다.
         * decorator는 statically한 언어(eg, java)에 runntime에 유연함을 제공한다.
           - complie time에 상속하는 것에 반대로
         * 그러나 Javascript는 dynamic 언어는 runtime시에 객체를 확장 할 수 있다. 
@@ -59,6 +58,7 @@
       }
     })();
 
+    // Component 역할
     var User = function (name) {
       this.name = name;
 
@@ -67,6 +67,7 @@
       };
     }
 
+    // Decorator역할
     var DecoratedUser = function (user, street, city) {
       this.user = user;
       this.name = user.name;  // [POINT] ensures interface stays the same

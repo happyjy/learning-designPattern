@@ -20,19 +20,17 @@
         * Factory Method는 서로 다르지만 동시에 많은 특성(예: 메서드, 속성)을 공통으로 갖는 객체 컬렉션을 관리, 유지 관리 되는 조작하는 응용 프로그램에서 자주 사용된다.
         * 예로 Xml, Pdf문서 및 Rtf문서가 혼합 된 문서 모음이 있다.
 
-      # Participants  
+      # Participants  개
         * Creator
-          - the 'factory' object that creates new products
-          - implements 'factoryMethod' which returns newly created products
-          - factory 객체는 새로운 인스턴스를 생성한다.
-          - 새로운 인스턴스를 반환하는 factoryMethod(createEmployee 함수)를 구현한다.
+          - #POINT1: factory 객체는 새로운 인스턴스를 생성한다.
+          - #POINT2: 새로운 인스턴스를 반환하는 factoryMethod(createEmployee 함수)를 구현한다.
           - code: Factory
         * AbstractProduct -- not used in JavaScript
           - 인스턴스를 생성할 인터페이스를 선언한다.
           - code: 사용되지 않음
         * ConcreteProduct
           - 인스턴스가 생성되는 대상이다.
-          - 모든 생성된 인스턴스가 같은 인터페이스를 지원한다(property와 함수들)
+          - #POINT2: 모든 생성된 인스턴스가 같은 인터페이스를 지원한다(property와 함수들)
           - code: Employees
 
       # 샘플 코드 설명 
@@ -42,7 +40,7 @@
         * 클라이언트는 유형 인수를 Factory 메서드에 전달하여 생성 할 직원 유형을 공장에 지시한다.
 
         * Javascript가 추상 클래스 또는 인터페이스를 지원하지 않기 때문에 다이어그램의 AbstractProduct는 구현되지 않는다.
-        * 그러나 모든 직원 유형이 동일한 인터페이스 (속성 및 메서드)를 갖도록해야합니다.
+        * 그러나 모든 직원 유형이 동일한 인터페이스 (속성 및 메서드)를 갖도록해야한다.
 
         * 네 가지 유형의 직원이 생성된다.
         * 모두 동일한 배열에 저장된다.
@@ -68,21 +66,27 @@
       }
     })();
 
+    // Creator 역할
     function Factory() {
       this.createEmployee = function (type) {
         var employee;
 
         if (type === 'fulltime') {
+          // #POINT1
           employee = new FullTime();
         } else if (type === 'parttime') {
+          // #POINT1
           employee = new PartTime();
         } else if (type === 'temporary') {
+          // #POINT1
           employee = new Temporary();
         } else if (type === 'contractor') {
+          // #POINT1
           employee = new Contractor();
         }
         employee.type = type;
 
+        // #POINT2
         employee.say = function () {
           log.add(`${this.type}: rate ${this.hourly} /hour`);
         }
@@ -91,15 +95,19 @@
       }
     }
 
+    // ConcreteProduct 역할
     var FullTime = function () {
       this.hourly = "$12";
     }
+    // ConcreteProduct 역할
     var PartTime = function () {
       this.hourly = "$11"
     }
+    // ConcreteProduct 역할
     var Temporary = function () {
       this.hourly = "$10"
     }
+    // ConcreteProduct 역할
     var Contractor = function () {
       this.hourly = "$15"
     }

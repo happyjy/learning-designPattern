@@ -78,10 +78,7 @@
           input 디바이스마다 반복적으로 보여줄 동작을 구현하는 것이 아니라 
           ConcreteImplementor(Screen, audio) 클래스를생성해 
           Bridge 패턴 구조를 만들어 효율적으로 관리하는 패턴으로 해석할 수 있겠다.
-    */
 
-
-    /* 
       #  Gestures, Mouse 함수 설명
         * 역할: RefinedAbstraction
         * parameter
@@ -90,8 +87,17 @@
           - output으로 받은 ConcreateImplementor객체를 수행한다.
           - Bridge 역할을 한다.
     */
+    var log = (function () {
+      var log = '';
+
+      return {
+        add: function (msg) { log += msg + "\n"; },
+        show: function () { console.log(log); log = ""; }
+      }
+    })();
+
     // 트랙패드라고 생각하자
-    // RefinedAbstraction
+    // RefinedAbstraction 역할
     var Gestures = function (output) {
       this.output = output;
 
@@ -100,7 +106,7 @@
       this.pan = function () { this.output.drag(); }
       this.pinch = function () { this.output.zoom(); }
     }
-    // RefinedAbstraction
+    // RefinedAbstraction 역학
     var Mouse = function (output) {
       this.output = output;
 
@@ -110,7 +116,7 @@
       this.wheel = function () { this.output.zoom(); }
     }
 
-    // ConcreteImplementor
+    // ConcreteImplementor 역할
     var Screen = function () {
       this.click = function () { log.add("Screen select"); };
       this.move = function () { log.add("Screen move"); };
@@ -118,22 +124,13 @@
       this.zoom = function () { log.add("Screen zoom in"); };
     }
 
-    // ConcreteImplementor
+    // ConcreteImplementor 역할
     var Audio = function () {
       this.click = function () { log.add("Audio select"); };
       this.move = function () { log.add("Audio waves"); };
       this.drag = function () { log.add("Audio screetch"); };
       this.zoom = function () { log.add("Audio volumn up"); };
     }
-
-    var log = (function () {
-      var log = '';
-
-      return {
-        add: function (msg) { log += msg + "\n"; },
-        show: function () { console.log(log); log = ""; }
-      }
-    })();
 
     function run() {
       var screen = new Screen();

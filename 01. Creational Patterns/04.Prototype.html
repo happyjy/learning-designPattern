@@ -43,14 +43,9 @@
         * 이것을 프로토타입의 고전적인 구현 방법이며 
             자바스크립트에서 더 효과적인것은 내장되어 있는 prototype 기능을 사용하는 것이다. 
         
-      # Question
-        * [ ] 이걸 어덯게 활용하는 걸가? 
-
-      # STUDY
+      # POINT
         * function에 this에 선언한 properties들은 
-        new 키워드로 객체를 생성시 생성된 객체의 바로 하위 property에 등록 된다.
-      
-
+          new 키워드로 객체를 생성시 생성된 객체의 바로 하위 property에 등록 된다.
     */
     function CustomerPrototype(proto) {
       this.proto = proto;
