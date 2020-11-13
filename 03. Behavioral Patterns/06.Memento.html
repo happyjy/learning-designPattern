@@ -96,11 +96,15 @@
     }
 
     function run() {
+      // # [POINT1]CareTaker객체에 Originator 역할을 하는(Person 생성자 함수)생성자함수의 인스턴스를 hydrate한 객체를 add한다.
+      //  ㄴ CareTacker가 Person 생성자 함수의 인스턴스를(mike, jyoon) caching한다.
+      //  ㄴ caching한 mike, jyoon인스턴스는 get 함수로 꺼내 쓸수 있다.
+
       var mike = new Person("Mike Foley", "1222 Main", "Dallas", "Tx");
       var jyoon = new Person("Jaeyoon", "48th Street", "sna jose", "CA");
       var caretaker = new CareTaker();
 
-      // save state
+      // [POINT1]save state
       caretaker.add(1, mike.hydrate());
       caretaker.add(2, jyoon.hydrate());
 
